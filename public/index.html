@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Chat Webhook Interface</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h1 class="mb-4 text-center text-muted">Google Chat Webhook</h1>
+    
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form id="messageForm">
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message:</label>
+                    <textarea class="form-control" id="message" rows="4" placeholder="Type your message..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-secondary w-100">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="result" class="alert d-none mt-3"></div>
+</div>
+
+<script>
+document.getElementById('messageForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const message = document.getElementById('message').value.trim();
+    const resultDiv = document.getElementById('result');
+
+    if (!message) {
+        resultDiv.className = 'alert alert-danger';
+        resultDiv.textContent = 'Please enter a message.';
+        resultDiv.classList.remove('d-none');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/send-message', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: message })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            resultDiv.className = 'alert alert-success';
+            resultDiv.textContent = 'Message sent successfully!';
+            document.getElementById('message').value = '';
+        } else {
+            throw new Error(result.message);
+        }
+    } catch (error) {
+        resultDiv.className = 'alert alert-danger';
+        resultDiv.textContent = 'Failed to send message.';
+    }
+    
+    resultDiv.classList.remove('d-none');
+});
+</script>
+
+</body>
+</html>
