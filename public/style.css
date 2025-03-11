@@ -1,0 +1,22 @@
+body {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+h1 {
+    color: #6c757d;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.card {
+    border-color: #6c757d;
+}
